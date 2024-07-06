@@ -9,11 +9,14 @@ public class ObstacleManager : MonoBehaviour
     [SerializeField] private int poolSize = 2; 
    
     [SerializeField] private float obstacleLifeTime = 10f; 
+    [SerializeField] Vector3 spawnpOS;
+    [SerializeField] Transform playerTransform;
+     [SerializeField] float playerSpawnDistance;
 
     private List<Queue<GameObject>> obstaclePools; 
 
     private float nextSpawnTime = 0f;
-    private float spawnInterval = 5f;
+    private float spawnInterval = 1;
 
     void Start()
     {
@@ -54,7 +57,8 @@ public class ObstacleManager : MonoBehaviour
         if (obstaclePools[randomIndex].Count > 0)
         {
             GameObject obstacle = obstaclePools[randomIndex].Dequeue();
-            obstacle.transform.position = this.gameObject.transform.position; 
+            Vector3 pos=new Vector3(0,0,playerTransform.position.z+playerSpawnDistance);
+            obstacle.transform.position = new Vector3(spawnpOS.x,spawnpOS.y,pos.z); 
             obstacle.SetActive(true);
             StartCoroutine(DisableAfterTime(obstacle, obstacleLifeTime));
         }
