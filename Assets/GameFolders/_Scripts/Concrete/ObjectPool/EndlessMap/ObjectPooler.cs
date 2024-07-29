@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -20,7 +21,14 @@ public class ObjectPooler : MonoBehaviour
 
     void Awake()
     {
-        Instance = this;
+        if (Instance == null) 
+        {
+            Instance = this;
+        }
+        else
+        {
+            Destroy(gameObject);
+        }
     }
     #endregion
 
@@ -42,14 +50,12 @@ public class ObjectPooler : MonoBehaviour
 
             poolDictionary.Add(pool.tag, objectPool);
         }
-       // ObjectSpawner.instance.SpawnGround();
     }
 
     public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
     {
         if (!poolDictionary.ContainsKey(tag))
         {
-            
             return null;
         }
 
@@ -58,10 +64,20 @@ public class ObjectPooler : MonoBehaviour
         objectToSpawn.SetActive(true);
         objectToSpawn.transform.position = position;
         objectToSpawn.transform.rotation = rotation;
-       
 
         poolDictionary[tag].Enqueue(objectToSpawn);
 
         return objectToSpawn;
+    }
+
+    private void OnLevelRestart()
+    {
+        foreach (var pool in poolDictionary)
+        {
+            foreach (var obj in pool.Value)
+            {
+                obj.SetActive(false);
+            }
+        }
     }
 }

@@ -17,7 +17,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] float jumpHeight = 2f;
     [SerializeField] float jumpDuration = 0.5f;
     [SerializeField] float zMoveSpeed;
-[SerializeField] LevelPhaseManager levelPhaseManager;   
+
     void Start()
     {
         _playerLane = 1;
@@ -26,16 +26,9 @@ public class PlayerController : MonoBehaviour
 
 
 
-void UpdateGameData()
-{
-GameData gameData = levelPhaseManager.CurrentGameData;
-            zMoveSpeed = gameData.PlayerSpeed;
-            Debug.Log(xMoveSpeed);
-}
-
     void Update()
     { 
-       UpdateGameData();
+      
         SetInput();
         PlayerMoveZ();
         
@@ -105,12 +98,4 @@ void PlayerMoveZ()
         });
     }
 
-    void OnCollisionEnter(Collision other)
-    {
-        if (other.gameObject.CompareTag("Obstacle"))
-        {
-            //GameManager.Instance.LoadPanel();
-            GameManagerState.Instance.onGameEnd?.Invoke();
-        }
-    }
 }
