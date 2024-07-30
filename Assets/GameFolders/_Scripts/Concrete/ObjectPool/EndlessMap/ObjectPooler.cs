@@ -6,7 +6,7 @@ public class ObjectPooler : MonoBehaviour
 {
     #region Data 
 
-    [System.Serializable]
+    [Serializable]
     public class Pool
     {
         public string tag;
@@ -16,21 +16,21 @@ public class ObjectPooler : MonoBehaviour
 
     #endregion
 
-    #region Instance
-    public static ObjectPooler Instance;
+    //#region Instance
+    //public static ObjectPooler Instance;
 
-    void Awake()
-    {
-        if (Instance == null) 
-        {
-            Instance = this;
-        }
-        else
-        {
-            Destroy(gameObject);
-        }
-    }
-    #endregion
+    //void Awake()
+    //{
+    //    if(Instance == null) 
+    //    {
+    //        Instance = this;
+    //    }
+    //    else
+    //    {
+    //        Destroy(gameObject);
+    //    }
+    //}
+    //#endregion
 
     public List<Pool> pools;
     public Dictionary<string, Queue<GameObject>> poolDictionary = new Dictionary<string, Queue<GameObject>>();
@@ -46,38 +46,44 @@ public class ObjectPooler : MonoBehaviour
                 GameObject obj = Instantiate(pool.prefab);
                 obj.SetActive(false);
                 objectPool.Enqueue(obj);
+                objectsStart.Add(obj);
             }
 
             poolDictionary.Add(pool.tag, objectPool);
+            
         }
+        CoreGameSignals.Instance.onLevelRestart += OnLevelRestart;
+        // ObjectSpawner.instance.SpawnGround();
     }
-
-    public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
-    {
-        if (!poolDictionary.ContainsKey(tag))
-        {
-            return null;
-        }
-
-        GameObject objectToSpawn = poolDictionary[tag].Dequeue();
-
-        objectToSpawn.SetActive(true);
-        objectToSpawn.transform.position = position;
-        objectToSpawn.transform.rotation = rotation;
-
-        poolDictionary[tag].Enqueue(objectToSpawn);
-
-        return objectToSpawn;
-    }
+    List<GameObject> objects = new List<GameObject>();
+    List<GameObject> objectsStart = new List<GameObject>();
 
     private void OnLevelRestart()
     {
-        foreach (var pool in poolDictionary)
+        while(objectsStart.Count > 0)
         {
-            foreach (var obj in pool.Value)
-            {
-                obj.SetActive(false);
-            }
+            Destroy(objectsStart[objectsStart.Count - 1]);
+            objectsStart.Remove(objectsStart[objectsStart.Count - 1]);
         }
     }
+
+
+   public GameObject SpawnFromPool(string tag, Vector3 position, Quaternion rotation)
+{
+    if (!poolDictionary.ContainsKey(tag))
+    {
+         return null;
+    }
+
+    GameObject objectToSpawn = poolDictionary[tag].Dequeue();
+    objects.Add(objectToSpawn);
+    objectToSpawn.transform.position = position;
+    objectToSpawn.transform.rotation = rotation;
+    objectToSpawn.SetActive(true);
+    poolDictionary[tag].Enqueue(objectToSpawn);
+
+    return objectToSpawn;
+}
+
+
 }

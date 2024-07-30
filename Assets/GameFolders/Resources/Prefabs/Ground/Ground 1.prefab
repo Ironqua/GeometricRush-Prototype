@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 5964260895431216454}
   - component: {fileID: 902920703485175671}
   m_Layer: 0
-  m_Name: Ground
+  m_Name: Ground 1
   m_TagString: Ground
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -65,8 +65,8 @@ BoxCollider:
   m_ProvidesContacts: 0
   m_Enabled: 1
   serializedVersion: 3
-  m_Size: {x: 11.162198, y: 3.95, z: 1}
-  m_Center: {x: 0, y: 1.5, z: 40.6}
+  m_Size: {x: 11.03, y: 3.95, z: 68.21}
+  m_Center: {x: 0, y: 1.5, z: 66.8}
 --- !u!1 &4821465045739014525
 GameObject:
   m_ObjectHideFlags: 0
@@ -129,7 +129,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 427937e4b2b90854e9d5000cfa8c63db, type: 2}
+  - {fileID: 2100000, guid: fb5e325e368d34f4e88de81064eb5ba1, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

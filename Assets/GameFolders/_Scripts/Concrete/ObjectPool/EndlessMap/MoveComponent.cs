@@ -1,27 +1,28 @@
-using System.Collections;
 using UnityEngine;
 
 public class MoveComponent : MonoBehaviour
 {
-    Transform playerTransform;
+    private ObjectSpawner objectSpawner;
+
     void Start()
     {
-        playerTransform=FindObjectOfType<PlayerController>().transform;
+        objectSpawner = FindObjectOfType<ObjectSpawner>();
     }
+
     void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.CompareTag("Player"))
         {
-            ObjectSpawner objectS = FindObjectOfType<ObjectSpawner>();
-            if (objectS != null)
-            {
-                objectS.SpawnGround();
-                // Zemini geçtikten sonra pasif hale getirme
-                //if(playerTransform.transform.position.z<this.gameObject.transform.position.z)
-                Debug.Log($"Player spawned");
-            }
+            Debug.Log("Player trigger entered");
+            objectSpawner?.SpawnGround();
         }
     }
 
-   
+    void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("Player"))
+        {
+            gameObject.SetActive(false);
+        }
+    }
 }
